@@ -2,8 +2,6 @@ const todoInput = document.querySelector("#todo-input");
 const todoList = document.querySelector('#todo-list');
 
 const savedTodoList = JSON.parse(localStorage.getItem('saved-items'));
-console.log(savedTodoList);
-
 
 const creteTodo = function(storageData) {
 
@@ -51,6 +49,7 @@ const deleteAll = function() {
     for(let i = 0; i<liList.length; i++) {
         liList[i].remove();
     }
+    saveItemsFn();
 }
 
 const saveItemsFn = function () {
@@ -65,8 +64,13 @@ const saveItemsFn = function () {
 
         saveItems.push(todoObj);
     }
-    localStorage.setItem('saved-items',JSON.stringify(saveItems));
+
+    saveItems.length === 0 ? 
+    localStorage.removeItem('saved-items') : localStorage.setItem('saved-items',JSON.stringify(saveItems));
+
+
 }
+    
 
 if(savedTodoList) {
     for(let i = 0; i<savedTodoList.length; i++) {
@@ -74,7 +78,53 @@ if(savedTodoList) {
     }
 }
 
+const weatherSearch = function(position) {
 
+    // JSON.parse는 헤더가 있으면 동작하지않음 , body있을떄만 사용가능
+
+    fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=e4d1ef5b35eb2d501c5da5d378e6d904`)
+        .then((res) => {
+            return res.json();
+        }).then( (json) => {
+            console.log(json.name, json.weather[0].description);
+        })
+        .catch( (err) => {
+            console.error(err);
+        })
+}
+
+const accessToGeo = function(position) {
+    const positionObj= {
+        latitude : position.coords.latitude,
+        longitude : position.coords.longitude
+    }
+
+    console.log(positionObj);
+    weatherSearch(positionObj);
+}
+
+
+const askForLocation = function() {
+    navigator.geolocation.getCurrentPosition(accessToGeo, (err) => {
+        console.log(err);
+    })
+}
+
+askForLocation();
+
+// const promiseTest = function() {
+//     return new Promise((resolver,reject) => {
+//         setTimeout(() => {
+//             resolver(100);
+//             // reject('err');
+//         }, 1000);
+        
+//     });
+// }
+// promiseTest().then( (res) => {
+//     console.log(res);
+// } )
 
 
 
