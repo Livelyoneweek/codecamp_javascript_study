@@ -97,7 +97,7 @@ const weatherDataActive = function ({location,weather}) {
 const weatherSearch = function(latitude,longitude) {
     // JSON.parse는 헤더가 있으면 동작하지않음 , body있을떄만 사용가능
     fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=e4d1ef5b35eb2d501c5da5d378e6d904`)
+        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=여기다가 계정 키 값 입력`)
         .then((res) => {
             return res.json();
         }).then( (json) => {
